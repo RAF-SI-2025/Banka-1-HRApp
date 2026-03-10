@@ -49,6 +49,21 @@ public class GradeRepository {
      * @return the grade value, or 0 if absent
      * @throws SQLException on database error
      */
+    /**
+     * Deletes the grade for the given task, if one exists.
+     *
+     * @param taskId the task's database ID
+     * @throws SQLException on database error
+     */
+    public void deleteByTaskId(long taskId) throws SQLException {
+        String sql = "DELETE FROM grades WHERE task_id = ?";
+        try (PreparedStatement ps = dbManager.getConnection().prepareStatement(sql)) {
+            ps.setLong(1, taskId);
+            ps.executeUpdate();
+        }
+        log.info("Deleted grade for task id={}", taskId);
+    }
+
     public int findByTaskId(long taskId) throws SQLException {
         String sql = "SELECT grade FROM grades WHERE task_id = ?";
         try (PreparedStatement ps = dbManager.getConnection().prepareStatement(sql)) {

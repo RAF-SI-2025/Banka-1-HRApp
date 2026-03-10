@@ -228,10 +228,9 @@ class TeamMemberServiceIntegrationTest extends IntegrationTestBase {
                 com.example.dto.CreateUpdateTaskDTO.of("Done", "", com.example.model.TaskStatus.COMPLETED));
         taskService.gradeTask(completed.getId(), 8);
 
-        // PENDING task with grade — should NOT count towards average
-        com.example.dto.TaskDTO pending = taskService.addTask(member.getId(),
+        // PENDING task — cannot be graded, should NOT count towards average
+        taskService.addTask(member.getId(),
                 com.example.dto.CreateUpdateTaskDTO.of("Pending", "", com.example.model.TaskStatus.PENDING));
-        taskService.gradeTask(pending.getId(), 2);
 
         TeamMemberDTO reloaded = memberService.getMemberById(member.getId());
         assertEquals(8.0, reloaded.getAverageGrade(), 0.001);
@@ -242,6 +241,8 @@ class TeamMemberServiceIntegrationTest extends IntegrationTestBase {
         TeamMemberDTO member = memberService.createMember(CreateUpdateMemberDTO.of("Grade", "Update"));
         com.example.dto.TaskDTO task = taskService.addTask(member.getId(),
                 com.example.dto.CreateUpdateTaskDTO.of("Task", "", com.example.model.TaskStatus.PENDING));
+        taskService.updateTask(task.getId(),
+                com.example.dto.CreateUpdateTaskDTO.of("Task", "", com.example.model.TaskStatus.COMPLETED));
 
         taskService.gradeTask(task.getId(), 5);
         taskService.gradeTask(task.getId(), 9); // overwrite

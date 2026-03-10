@@ -127,6 +127,11 @@ class TaskServiceTest {
 
     @Test
     void gradeTask_withValidGrade_callsSaveOrUpdate() throws SQLException {
+        Task completedTask = new Task("Some task");
+        completedTask.setId(5L);
+        completedTask.setStatus(TaskStatus.COMPLETED);
+        when(taskRepo.findById(5L)).thenReturn(java.util.Optional.of(completedTask));
+
         service.gradeTask(5L, 8);
 
         verify(gradeRepo).saveOrUpdate(8, 5L);
@@ -134,6 +139,11 @@ class TaskServiceTest {
 
     @Test
     void gradeTask_withMinGrade_callsSaveOrUpdate() throws SQLException {
+        Task completedTask = new Task("Some task");
+        completedTask.setId(1L);
+        completedTask.setStatus(TaskStatus.COMPLETED);
+        when(taskRepo.findById(1L)).thenReturn(java.util.Optional.of(completedTask));
+
         service.gradeTask(1L, 1);
 
         verify(gradeRepo).saveOrUpdate(1, 1L);
@@ -141,6 +151,11 @@ class TaskServiceTest {
 
     @Test
     void gradeTask_withMaxGrade_callsSaveOrUpdate() throws SQLException {
+        Task completedTask = new Task("Some task");
+        completedTask.setId(1L);
+        completedTask.setStatus(TaskStatus.COMPLETED);
+        when(taskRepo.findById(1L)).thenReturn(java.util.Optional.of(completedTask));
+
         service.gradeTask(1L, 10);
 
         verify(gradeRepo).saveOrUpdate(10, 1L);

@@ -131,6 +131,16 @@ public class TaskService {
                     transactionManager.rollback();
                     throw e;
                 }
+            } else if (dto.getStatus() == TaskStatus.PENDING) {
+                transactionManager.beginTransaction();
+                try {
+                    taskRepo.update(task);
+                    gradeRepo.deleteByTaskId(taskId);
+                    transactionManager.commit();
+                } catch (SQLException e) {
+                    transactionManager.rollback();
+                    throw e;
+                }
             } else {
                 taskRepo.update(task);
             }
